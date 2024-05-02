@@ -1,6 +1,6 @@
-import { Dropdown, DropdownMenu, DropdownTrigger, DropdownItem, Button, Input } from "@nextui-org/react";
+import { Dropdown, DropdownMenu, DropdownTrigger, DropdownItem, Button, Input, DropdownSection } from "@nextui-org/react";
 import { carbonableProjects } from "../config";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 
 interface SearchProps {
     address: string | null;
@@ -11,25 +11,29 @@ interface SearchProps {
 
 export default function SearchComponent({ address, setAddress, tokenId, setTokenId }: SearchProps) {
     // Return dropdown + inputs (conditional custom address + tokenid)
+    const [displayCustom, setDisplayCustom] = useState<boolean>(false);
 
     const handleInput = useCallback((e: any) => {
         const n = e.target.value;
+        console.log({ "input": n });
         setTokenId(n);
     }, []);
 
-    const handleSelectionChange = useCallback((e: any) => {
-        const n = e.target.value;
-        console.log(e.target);
-        // TODO
-        // set address
-        // change state variable display contract input
-    }, []);
+    const handleDropDownAction = (key: any) => {
+        console.log({ "key": key });
+        if (key === "custom") {
+            setDisplayCustom(true);
+        } else {
+            const project = carbonableProjects.find((p) => p.name === key);
+            if (project) {
+                setAddress(project.address);
+            }
+            setDisplayCustom(false);
+        }
+    };
 
-    const handleClick = () => {
-        // Redirect to page with address and tokenid
-
+    const loadMetadataClick = () => {
         window.location.href = `/?address=${address}&tokenId=${tokenId}`;
-
     }
 
     return (<>
@@ -37,15 +41,25 @@ export default function SearchComponent({ address, setAddress, tokenId, setToken
             <DropdownTrigger>
                 <Button variant="bordered">Choose Asset</Button>
             </DropdownTrigger>
-            <DropdownMenu aria-label="Link Actions" onSelectionChange={handleSelectionChange}>
-                {carbonableProjects.map((project) => (
-                    <DropdownItem key={project.name}>
-                        {project.name}
-                    </DropdownItem>
-                ))}
+            <DropdownMenu aria-label="Link Actions" onAction={handleDropDownAction}>
+                <DropdownSection>
+                    {carbonableProjects.map((project) => (
+                        <DropdownItem key={project.name}  >
+                            {project.name}
+                        </DropdownItem>
+                    ))}
+                </DropdownSection>
+
+                <DropdownItem key={"custom"}>
+                    Other assets
+                </DropdownItem>
+
             </DropdownMenu>
         </Dropdown>
+
+        {displayCustom && <Input placeholder={"Enter address"} onChange={(e) => setAddress(e.target.value)}></Input>}
+
         <Input placeholder={"Enter token id"} onChange={handleInput}></Input>
-        <Button onClick={handleClick}>Search</Button>
+        <Button onClick={loadMetadataClick}>Load</Button>
     </>)
 }
