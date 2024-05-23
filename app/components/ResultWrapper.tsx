@@ -1,21 +1,16 @@
+import { useAssetContext } from "./AssetProvider";
 import TokenURI from "./TokenURI";
 
-export interface ResultWrapperProps {
-    contractAddress: string | null;
-    tokenId: string | null
-}
+export default function ResultWrapper() {
+    const { address, tokenId } = useAssetContext();
 
-export default function ResultWrapper(params: ResultWrapperProps) {
-    if (params.tokenId === null || params.contractAddress === null) {
+    if (tokenId === null || address === null || tokenId === "null" || address === "null" || address === "" || tokenId === "") {
         return null;
     }
 
     return (
         <>
-            <TokenURI
-                contractAddress={params.contractAddress}
-                tokenId={params.tokenId}
-            />
+            <TokenURI />
         </>
     )
 }
