@@ -33,6 +33,7 @@ export default function TokenURI() {
 
 function TokenURIResult({ address, tokenId, contractAbi }: { address: string, tokenId: string, contractAbi: Abi}) {
     const [uri, setURI] = useState<any>(undefined);
+    const [readableError, setReadableError] = useState<string | null>(null);
     
     const { data, isLoading, error } = useContractRead({
         address: address,
@@ -55,6 +56,23 @@ function TokenURIResult({ address, tokenId, contractAbi }: { address: string, to
         }
 
     }, [data]);
+
+    useEffect(() => {
+        if (error === null) { 
+            setReadableError(null);
+            return;
+        }
+
+        const regex = /Failure reason: 0x(?:\w+) \('([^']+)'\)/;
+        const match = error.message.match(regex);
+
+        if (match && match.length > 1) {
+            setReadableError(match[1]);
+        } else {
+            setReadableError(error.message);
+        }
+
+    }, [error]);
     return (
         <div className="text-left border border-opacityLight-10 rounded-lg p-4 w-full bg-opacityLight-5">
             <div className="text-lg uppercase font-light text-neutral-300">
@@ -64,9 +82,13 @@ function TokenURIResult({ address, tokenId, contractAbi }: { address: string, to
                 <img className="mt-4" width="300px" src={"data:image/svg+xml;base64," + btoa(getMetadataImage(uri))} alt='' />
             }
             {isLoading && <p>Loading...</p>}
-            {error && 
-                <div className="mt-2 border border-red-500/50 bg-red-700 p-4 text-sm overflow-hidden text-ellipsis rounded-lg w-full">
-                    Error: {error.message}
+            {readableError &&
+                <div className="mt-2 border border-red-500/50 bg-red-700 p-4 overflow-hidden whitespace-normal break-words rounded-lg w-full">
+                    <div>{readableError}</div>
+                    <div className="mt-2 text-sm">
+                        <p className="underline">Full trace:</p> 
+                        <p>{error?.message}</p>
+                    </div>
                 </div>
             }
         </div>
