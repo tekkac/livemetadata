@@ -22,15 +22,20 @@ export default function SearchComponent() {
     const handleDropDownAction = (key: any) => {
         if (key === "custom") {
             setDisplayCustom(true);
-            setAddress(null);
-            setTokenId(null);
+            setFormAddress("");
+            setFormTokenId("");
+            setFormSlot("");
             setSelectedProject(customProject);
         } else {
             const project = projects.find((p) => p.name === key);
             if (project) {
                 setAddress(project.address);
+                setFormAddress(project.address);
                 setSlot(project.slot);
+                setFormSlot(project.slot ? project.slot.toString() : "");
                 setSelectedProject(project);
+                setFormTokenId("");
+                setTokenId(null);
             }
             setDisplayCustom(false);
         }
