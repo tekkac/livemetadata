@@ -8,8 +8,6 @@ type AssetContextType = {
   setAddress: (address: string | null) => void;
   tokenId: string | null;
   setTokenId: (tokenId: string | null) => void;
-  slot: number | null;
-  setSlot: (slot: number | null) => void;
 };
 
 const AssetContext = createContext<AssetContextType>({} as AssetContextType);
@@ -22,8 +20,6 @@ export const AssetProvider: FC<Props> = ({ children }) => {
   const params = useSearchParams()
   const [address, setAddress] = useState<string | null>(params.get('address'));
   const [tokenId, setTokenId] = useState<string | null>(params.get('tokenId'));
-  const slotString = params.get('slot');
-  const [slot, setSlot] = useState<number | null>(slotString ? parseInt(slotString) : null);
 
   return (
     <AssetContext.Provider
@@ -32,8 +28,6 @@ export const AssetProvider: FC<Props> = ({ children }) => {
         setAddress,
         tokenId,
         setTokenId,
-        slot,
-        setSlot
       }}
     >
       {children}

@@ -5,12 +5,11 @@ import { Project } from "../types/types";
 import { useAssetContext } from "./AssetProvider";
 
 export default function SearchComponent() {
-    const { address, setAddress, setTokenId, tokenId, slot, setSlot } = useAssetContext();
+    const { address, setAddress, setTokenId, tokenId } = useAssetContext();
     const [projects, setProjects] = useState<Project[]>(carbonableProjects);
     const [displayCustom, setDisplayCustom] = useState<boolean>(false);
     const [selectedProject, setSelectedProject] = useState<Project|undefined>(undefined);
     const [formAddress, setFormAddress] = useState<string>(address ? address : "");
-    const [formSlot, setFormSlot] = useState<string>(slot ? slot.toString(): "");
     const [formTokenId, setFormTokenId] = useState<string>(tokenId ? tokenId : "");
 
     useEffect(() => {
@@ -24,15 +23,12 @@ export default function SearchComponent() {
             setDisplayCustom(true);
             setFormAddress("");
             setFormTokenId("");
-            setFormSlot("");
             setSelectedProject(customProject);
         } else {
             const project = projects.find((p) => p.name === key);
             if (project) {
                 setAddress(project.address);
                 setFormAddress(project.address);
-                setSlot(project.slot);
-                setFormSlot(project.slot ? project.slot.toString() : "");
                 setSelectedProject(project);
                 setFormTokenId("");
                 setTokenId(null);
@@ -42,7 +38,7 @@ export default function SearchComponent() {
     };
 
     const loadMetadataClick = () => {
-        window.location.href = `/?address=${formAddress}&slot=${formSlot}&tokenId=${formTokenId}`;
+        window.location.href = `/?address=${formAddress}&tokenId=${formTokenId}`;
     }
 
     return (
@@ -93,8 +89,6 @@ export default function SearchComponent() {
                                 setAddress={setFormAddress}
                                 tokenId={formTokenId}
                                 setTokenId={setFormTokenId}
-                                slot={formSlot}
-                                setSlot={setFormSlot}
                             />
                         </div>
                     </div>
@@ -104,9 +98,7 @@ export default function SearchComponent() {
                                 formTokenId === null ||
                                 formTokenId === "" ||
                                 formAddress === null ||
-                                formAddress === "" ||
-                                formSlot === null ||
-                                formSlot.toString() === ""
+                                formAddress === ""
                             } 
                             className="bg-greenish-500 rounded-lg py-2 px-4 w-full disabled:bg-greenish-700 disabled:text-neutral-300 disabled:cursor-not-allowed" onClick={loadMetadataClick}>Load</button>
                     </div>
@@ -116,7 +108,7 @@ export default function SearchComponent() {
     )
 }
 
-function InputsComponents({ displayCustom, address, setAddress, tokenId, setTokenId, slot, setSlot }: { displayCustom: boolean, address: string, setAddress: (address: string) => void, tokenId: string, setTokenId: (tokenId: string) => void, slot: string, setSlot: (slot: string) => void }) {
+function InputsComponents({ displayCustom, address, setAddress, tokenId, setTokenId }: { displayCustom: boolean, address: string, setAddress: (address: string) => void, tokenId: string, setTokenId: (tokenId: string) => void }) {
     const className = "rounded-lg px-4 py-2 text-neutral-900 w-11/12 mt-1";
 
     return (
@@ -130,15 +122,6 @@ function InputsComponents({ displayCustom, address, setAddress, tokenId, setToke
                     placeholder={"Enter address"} 
                     onChange={(e) => setAddress(e.target.value)} 
                 />
-            </div>
-            <div className="mt-2">
-                <div className="text-neutral-300 text-sm">Slot</div>
-                <input 
-                    disabled={displayCustom === false}
-                    className={className}
-                    value={slot ? slot : ""}
-                    placeholder={"Enter slot"} type="number" 
-                    onChange={(e) => setSlot(e.target.value)} />
             </div>
             <div className="mt-2">
                 <div className="text-neutral-300 text-sm">Token ID</div>
