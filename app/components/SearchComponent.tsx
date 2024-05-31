@@ -8,7 +8,7 @@ export default function SearchComponent() {
     const { address, setAddress, setTokenId, tokenId } = useAssetContext();
     const [projects, setProjects] = useState<Project[]>(carbonableProjects);
     const [displayCustom, setDisplayCustom] = useState<boolean>(false);
-    const [selectedProject, setSelectedProject] = useState<Project|undefined>(undefined);
+    const [selectedProject, setSelectedProject] = useState<Project | undefined>(undefined);
     const [formAddress, setFormAddress] = useState<string>(address ? address : "");
     const [formTokenId, setFormTokenId] = useState<string>(tokenId ? tokenId : "");
 
@@ -24,6 +24,7 @@ export default function SearchComponent() {
             setFormAddress("");
             setFormTokenId("");
             setSelectedProject(customProject);
+            // TODO: add collection in the project list
         } else {
             const project = projects.find((p) => p.name === key);
             if (project) {
@@ -52,7 +53,7 @@ export default function SearchComponent() {
                         <DropdownTrigger>
                             <button className="border border-opacityLight-20 rounded-lg outline-none py-2 px-4 flex items-center">
                                 <div>
-                                    {!selectedProject?.name ? 'Choose Asset' : selectedProject.name }
+                                    {!selectedProject?.name ? 'Choose Asset' : selectedProject.name}
                                 </div>
                                 <div className="text-xl text-neutral-300 ml-4 mb-3">
                                     &#8964;
@@ -83,7 +84,7 @@ export default function SearchComponent() {
                             Asset details
                         </div>
                         <div className="mt-4">
-                            <InputsComponents 
+                            <InputsComponents
                                 displayCustom={displayCustom}
                                 address={formAddress}
                                 setAddress={setFormAddress}
@@ -93,13 +94,13 @@ export default function SearchComponent() {
                         </div>
                     </div>
                     <div className="mt-4">
-                        <button 
+                        <button
                             disabled={
                                 formTokenId === null ||
                                 formTokenId === "" ||
                                 formAddress === null ||
                                 formAddress === ""
-                            } 
+                            }
                             className="bg-greenish-500 rounded-lg py-2 px-4 w-full disabled:bg-greenish-700 disabled:text-neutral-300 disabled:cursor-not-allowed" onClick={loadMetadataClick}>Load</button>
                     </div>
                 </>
@@ -115,17 +116,17 @@ function InputsComponents({ displayCustom, address, setAddress, tokenId, setToke
         <>
             <div>
                 <div className="text-neutral-300 text-sm">Address</div>
-                <input 
-                    disabled={displayCustom === false} 
-                    className={className} 
+                <input
+                    disabled={displayCustom === false}
+                    className={className}
                     value={address ? address : ""}
-                    placeholder={"Enter address"} 
-                    onChange={(e) => setAddress(e.target.value)} 
+                    placeholder={"Enter address"}
+                    onChange={(e) => setAddress(e.target.value)}
                 />
             </div>
             <div className="mt-2">
                 <div className="text-neutral-300 text-sm">Token ID</div>
-                <input 
+                <input
                     className={className}
                     placeholder={"Enter token id"}
                     value={tokenId ? tokenId : ""}
