@@ -17,7 +17,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  let rpcApiKey = process.env.RPC_API_KEY || 'free';
+  let rpcApiKey = process.env.RPC_API_KEY || '';
   return (
     <html lang="en">
       <body className={`${inter.className} bg-neutral-800 text-neutral-100 min-h-screen`}>
