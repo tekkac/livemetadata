@@ -6,6 +6,5 @@ export interface TokenURIProps {
 export interface Project {
     name: string;
     address: string;
-    slot: number | null;
     type: string;
 }
