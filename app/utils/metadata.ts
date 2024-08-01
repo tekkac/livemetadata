@@ -6,7 +6,7 @@ export async function getMetadataImage(data: any) {
     if (data.hasOwnProperty('image')) {
         imageData = data.image;
         if (imageData.startsWith("http")) {
-            return await fetch(imageData, { cache: 'no-store' });
+            return imageData;
         }
     }
     if (data.hasOwnProperty('image_data')) {

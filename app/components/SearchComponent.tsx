@@ -77,7 +77,7 @@ export default function SearchComponent() {
                     </Dropdown>
                 </div>
             </div>
-            {selectedProject !== undefined &&
+            {
                 <>
                     <div className="mt-4 border border-opacityLight-10 rounded-lg p-4 w-full bg-opacityLight-5">
                         <div className="text-lg uppercase font-light text-neutral-300">
